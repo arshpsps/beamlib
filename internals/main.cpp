@@ -2,8 +2,8 @@
 
 const float DRAW_FPS = 60;
 const float NORMAL_FPS = 30;
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 450;
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 650;
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "beamlib");
@@ -17,9 +17,18 @@ int main() {
 
     SetTargetFPS(DRAW_FPS);
     Vector2 pos = {800.0 / 2, 450.0 / 2};
+    int moveDirection = 1;
+    int speed = 100;
 
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
+        if (pos.x >= SCREEN_WIDTH) {
+            moveDirection = -1;
+            speed *= 1.5;
+        } else if (pos.x <= 0) {
+            moveDirection = 1;
+            speed *= 1.5;
+        }
         BeginDrawing();
         {
             ClearBackground(BLACK);
@@ -29,7 +38,7 @@ int main() {
                          (MeasureText(textToWrite, 20) / 2),
                      (GetScreenHeight() / 2), 20, LIGHTGRAY);
 
-            pos = {pos.x + 100 * deltaTime, pos.y};
+            pos = {pos.x + (speed * moveDirection) * deltaTime, pos.y};
 
             DrawPoly(pos, 4, 10.0, 45, LIGHTGRAY);
             DrawFPS(5, 5);
